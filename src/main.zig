@@ -1,7 +1,6 @@
-
 // src/main.zig
 const r = @cImport(@cInclude("raylib.h"));
-
+const rgui = @cImport(@cInclude("raygui.h"));
 // create struct for position
 pub const Position = struct {
     x: f32,
@@ -9,32 +8,35 @@ pub const Position = struct {
 };
 
 pub fn main() !void {
-	r.InitWindow(960, 540, "My Window Name");
-	r.SetTargetFPS(144);
-	defer r.CloseWindow();
+    r.InitWindow(960, 540, "My Window Name");
+    r.SetTargetFPS(144);
+    defer r.CloseWindow();
 
-    var pos = Position { .x = 0.0, .y = 0.0 };
+    var pos = Position{ .x = 0.0, .y = 0.0 };
+    var checked = false;
 
-	while (!r.WindowShouldClose()) {
-		r.BeginDrawing();
-		r.ClearBackground(r.BLACK);
+    while (!r.WindowShouldClose()) {
+        r.BeginDrawing();
+        r.ClearBackground(r.BLACK);
         r.DrawText("Congrats! You created your first window!", 190, 200, 20, r.LIGHTGRAY);
 
-        if(r.IsKeyDown(r.KEY_RIGHT)) {
+        if (r.IsKeyDown(r.KEY_RIGHT)) {
             pos.x += 1.0;
         }
-        if(r.IsKeyDown(r.KEY_LEFT)) {
+        if (r.IsKeyDown(r.KEY_LEFT)) {
             pos.x -= 1.0;
         }
-        if(r.IsKeyDown(r.KEY_UP)) {
+        if (r.IsKeyDown(r.KEY_UP)) {
             pos.y -= 1.0;
         }
-        if(r.IsKeyDown(r.KEY_DOWN)) {
+        if (r.IsKeyDown(r.KEY_DOWN)) {
             pos.y += 1.0;
         }
 
-        r.DrawCircleV(r.Vector2 { .x = pos.x, .y = pos.y }, 50.0, r.RED);
+        r.DrawCircleV(r.Vector2{ .x = pos.x, .y = pos.y }, 50.0, r.RED);
 
-		r.EndDrawing();
-	}
+        _ = rgui.GuiCheckBox(rgui.Rectangle{ .x = 20, .y = 20, .height = 200, .width = 100 }, "FORCE CHECK!", &checked);
+
+        r.EndDrawing();
+    }
 }
